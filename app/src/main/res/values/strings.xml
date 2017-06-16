@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Popular Movies App</string>
+    <string name="sort_order">Sort Order</string>
+    <string name="poster_of_movie">Poster of movie</string>
+    <string name="error_internet">Please check the internet connection</string>
+    <string name="movie_poster">Movie poster</string>
+    <string name="settings">Settings</string>
+    <string name="release_date">Release date: </string>
+    <string name="user_ratings">User ratings: </string>
+    <string name="overview">Overview: </string>
+</resources>
