@@ -22,7 +22,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.lovebhardwaj.popularmoviesapp.Adapters.ReviewListAdapter;
 import com.example.lovebhardwaj.popularmoviesapp.Adapters.TrailerListAdapter;
 import com.example.lovebhardwaj.popularmoviesapp.Data.MovieContract;
-import com.example.lovebhardwaj.popularmoviesapp.Data.MovieDbHelper;
 import com.example.lovebhardwaj.popularmoviesapp.Utilities.JsonDataUtility;
 import com.example.lovebhardwaj.popularmoviesapp.Utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -155,8 +154,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setUpToggleButton(final ToggleButton toggleButton) {
-        final MovieDbHelper mMovieDbHelper = MovieDbHelper.getInstance(this);
-
 
         if (toggleButton != null) {
             toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -174,7 +174,8 @@
                 app:layout_constraintLeft_toRightOf="@+id/trailerHeadingTv"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/trailerHeadingTv"
-                app:srcCompat="@android:drawable/ic_menu_share"/>
+                app:srcCompat="@android:drawable/ic_menu_share"
+                android:contentDescription="@string/share_content_desc"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/trailersRecyclerView"

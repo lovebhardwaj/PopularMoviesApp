@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by love on 6/12/2017.
+ * Adapter to populate recycler view in the main activity
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MoveItemViewHolder> {

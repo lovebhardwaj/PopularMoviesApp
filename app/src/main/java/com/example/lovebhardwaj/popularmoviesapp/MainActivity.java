@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         startActivity(intent);//Start the activity
     }
 
-    boolean checkIfFavorite(JsonDataUtility.MovieItem item){
+    private boolean checkIfFavorite(JsonDataUtility.MovieItem item){
         boolean status = false;
         for (JsonDataUtility.MovieItem listItem : mFavoriteList){
             if (listItem.getMovieId().equals(item.getMovieId())){

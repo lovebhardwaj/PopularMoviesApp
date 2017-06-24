@@ -11,10 +11,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MovieDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "MovieDbHelper";
 
-    private static String DATABASE_NAME = "favoritemovies.db";
+    private static final String DATABASE_NAME = "favoritemovies.db";
     private static int DATABASE_VERSION = 1;
 
-    public static MovieDbHelper instance = null;
+    private static MovieDbHelper instance = null;
 
     public static MovieDbHelper getInstance(Context context){
         if (instance == null){
@@ -29,9 +29,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlQuery = null;
 
-        sqlQuery = "CREATE TABLE IF NOT EXISTS " + MovieContract.MovieEntry.TABLE_NAME + " (" + MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        String sqlQuery = "CREATE TABLE IF NOT EXISTS " + MovieContract.MovieEntry.TABLE_NAME + " (" + MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + MovieContract.MovieEntry.MOVIE_ID + " TEXT NOT NULL UNIQUE, " + MovieContract.MovieEntry.MOVIE_TITLE
                 + " TEXT NOT NULL, " + MovieContract.MovieEntry.MOVIE_POSTER_PATH + " TEXT NOT NULL, " + MovieContract.MovieEntry.MOVIE_PLOT + " TEXT NOT NULL, "
                 + MovieContract.MovieEntry.MOVIE_RATING + " TEXT NOT NULL, " + MovieContract.MovieEntry.MOVIE_RELEASE_DATE + " TEXT NOT NULL);";
