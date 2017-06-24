@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     tools:context="com.example.lovebhardwaj.popularmoviesapp.MovieDetailsActivity">
 
 
@@ -15,7 +14,6 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:padding="0dp"
-        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,30 +26,13 @@
             android:layout_height="wrap_content">
 
 
-            <ImageButton
-                android:id="@+id/shareButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@android:color/white"
-                android:contentDescription="@string/share_trailer"
-                app:layout_constraintBottom_toTopOf="@+id/trailerHeadingTv"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintLeft_toRightOf="@+id/trailerHeadingTv"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/trailerHeadingTv"
-                app:srcCompat="@android:drawable/ic_menu_share"/>
-
             <ImageView
                 android:id="@+id/posterImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:padding="12dp"
+                android:layout_margin="16dp"
                 android:contentDescription="@string/movie_poster"
+                android:padding="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movieTitleTextView"
                 app:srcCompat="@drawable/placeholder"/>
@@ -62,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
                 android:gravity="start"
-                android:padding="30dp"
+                android:padding="16dp"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
                 android:textSize="34sp"
@@ -88,18 +69,26 @@
 
             <TextView
                 android:id="@+id/tv_release"
-                style="@style/Headings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/release"
+                android:textColor="@android:color/black"
                 app:layout_constraintBaseline_toBaselineOf="@+id/releaseDateTextView"
                 app:layout_constraintLeft_toRightOf="@+id/posterImageView"/>
 
             <TextView
                 android:id="@+id/releaseDateTextView"
-                style="@style/NormalText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
                 app:layout_constraintLeft_toRightOf="@+id/tv_release"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movieTitleTextView"
@@ -107,18 +96,26 @@
 
             <TextView
                 android:id="@+id/tv_rating"
-                style="@style/Headings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/ratings"
+                android:textColor="@android:color/black"
                 app:layout_constraintBaseline_toBaselineOf="@+id/ratingTextView"
                 app:layout_constraintLeft_toRightOf="@+id/posterImageView"/>
 
             <TextView
                 android:id="@+id/ratingTextView"
-                style="@style/NormalText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp"
                 app:layout_constraintLeft_toRightOf="@+id/tv_rating"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/releaseDateTextView"
@@ -128,68 +125,86 @@
                 android:id="@+id/plotTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-android:layout_margin="8dp"
-                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:gravity="start"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorPrimaryDark"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:textStyle="italic"
+                app:layout_constraintLeft_toRightOf="@+id/posterImageView"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ratingTextView"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_margin="8dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/background_rectangle"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/posterImageView"/>
 
             <TextView
-                android:id="@+id/textView2"
-                style="@style/LineStyle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/plotTextView"/>
-
-            <TextView
                 android:id="@+id/trailerHeadingTv"
-                style="@style/HeadingCentre"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/trailers"
+                style="@style/HeadingCentre"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
-            <TextView
-                android:id="@+id/textViewLine"
-                style="@style/LineStyle"
-                app:layout_constraintBottom_toTopOf="@+id/reviewHeadingTv"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/trailersRecyclerView"/>
-
-            <TextView
-                android:id="@+id/reviewHeadingTv"
-                style="@style/HeadingCentre"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/reviews"
-                app:layout_constraintLeft_toLeftOf="parent"
+            <ImageButton
+                android:id="@+id/shareButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/white"
+                app:layout_constraintBottom_toTopOf="@+id/trailerHeadingTv"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toRightOf="@+id/trailerHeadingTv"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/trailersRecyclerView"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/reviewRecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reviewHeadingTv"/>
+                app:layout_constraintTop_toBottomOf="@+id/trailerHeadingTv"
+                app:srcCompat="@android:drawable/ic_menu_share"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/trailersRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:layout_constraintHorizontal_bias="1.0"
+                android:layout_margin="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/trailerHeadingTv"/>
+
+            <TextView
+                android:id="@+id/reviewHeadingTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/reviews"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/trailersRecyclerView"
+                style="@style/HeadingCentre"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reviewRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewHeadingTv"/>
 
         </android.support.constraint.ConstraintLayout>
 
