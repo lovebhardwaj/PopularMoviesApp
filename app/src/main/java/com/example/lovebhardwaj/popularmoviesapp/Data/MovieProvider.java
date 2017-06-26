@@ -88,7 +88,7 @@ public class MovieProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         int matcher = sUriMatcher.match(uri);
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        Uri returnUri = null;
+        Uri returnUri;
         long id;
 
         switch (matcher) {
@@ -112,7 +112,7 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int matcher = sUriMatcher.match(uri);
-        SQLiteDatabase db = null;
+        SQLiteDatabase db;
         int count;
         switch (matcher) {
             case MOVIE:
@@ -140,7 +140,7 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int matcher = sUriMatcher.match(uri);
-        SQLiteDatabase db = null;
+        SQLiteDatabase db;
         int count;
         switch (matcher) {
             case MOVIE:

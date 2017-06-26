@@ -61,7 +61,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Move
         if (mMovieItems != null && mMovieItems.size() > 0) {
             return mMovieItems.size();
         }
-        return 1;
+        return 0;
     }
 
     public void loadNewData(ArrayList<JsonDataUtility.MovieItem> newArrayList){

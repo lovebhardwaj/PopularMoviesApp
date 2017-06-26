@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * DbHelper class used by the content provider of the class to perform various database related functions
  */
 
-public class MovieDbHelper extends SQLiteOpenHelper {
+class MovieDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "MovieDbHelper";
 
     private static final String DATABASE_NAME = "favoritemovies.db";
@@ -16,7 +16,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     private static MovieDbHelper instance = null;
 
-    public static MovieDbHelper getInstance(Context context){
+    static MovieDbHelper getInstance(Context context){
         if (instance == null){
             return new MovieDbHelper(context);
         }
