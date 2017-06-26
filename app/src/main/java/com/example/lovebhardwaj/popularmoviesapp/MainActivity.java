@@ -33,8 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-
 public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnPosterClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
         LoaderManager.LoaderCallbacks<Cursor>{
     private static final String TAG = "MainActivity";
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     private ArrayList<JsonDataUtility.MovieItem> mMovieItems;
     private ArrayList<JsonDataUtility.MovieItem> mFavoriteList;
 
-    @BindView(R.id.moviePosterRecyclerView) RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private Parcelable recyclerViewState;
 
@@ -74,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mProgressBar.setVisibility(View.VISIBLE);
 
         mLayoutManager = new GridLayoutManager(this, numberOfColumns());
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.moviePosterRecyclerView);
+        mMovieItems = null;
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
