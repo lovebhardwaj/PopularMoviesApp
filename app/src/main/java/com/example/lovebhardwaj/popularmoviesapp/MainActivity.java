@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,11 +79,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mRecyclerView.setHasFixedSize(true);
         mMovieListAdapter = new MovieListAdapter(mMovieItems, this, this);
         mRecyclerView.setAdapter(mMovieListAdapter);
-        defaultList();
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         statusString = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
+        defaultList();
+        Log.d(TAG, "onCreate: status string : " + statusString);
         isSameList = false;
 
         if (savedInstanceState != null) {
@@ -116,11 +118,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                 loadDataFromApi(SELECTION_TOP_RATED);
                 break;
             case SELECTION_FAVORITE:
-                if (mFavoriteList == null || mFavoriteList.isEmpty()){
-                    Toast.makeText(this, "No Favorite List Created", Toast.LENGTH_SHORT).show();
-                }else {
-                    getSupportLoaderManager().restartLoader(FAVORITE_LOADER_ID, null, this);
-                }
+                getSupportLoaderManager().restartLoader(FAVORITE_LOADER_ID, null, this);
+
                 break;
             default:
                 loadDataFromApi(SELECTION_POPULAR);
@@ -172,9 +171,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     private boolean checkIfFavorite(JsonDataUtility.MovieItem item) {
         boolean status = false;
-        for (JsonDataUtility.MovieItem listItem : mFavoriteList) {
-            if (listItem.getMovieId().equals(item.getMovieId())) {
-                status = true;
+        if (mFavoriteList != null) {
+            for (JsonDataUtility.MovieItem listItem : mFavoriteList) {
+                if (listItem.getMovieId().equals(item.getMovieId())) {
+                    status = true;
+                }
             }
         }
         return status;
@@ -216,23 +217,30 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     }
 
     private void defaultList() {
+        Log.d(TAG, "defaultList: default list");
         String selectionCriteria = SELECTION_POPULAR;
         //Selection criteria for data to be downloaded
 
         //No need to check if preference is empty, if it is the default value is used
         if (mSharedPreferences != null) {
-            switch (mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR)) {
+            selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
+            Log.d(TAG, "defaultList: selection criteria : " + selectionCriteria);
+            switch (selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR)) {
                 case SELECTION_POPULAR:
+                    Log.d(TAG, "defaultList: popular");
                     loadDataFromApi(selectionCriteria);
                     break;
                 case SELECTION_TOP_RATED:
+                    Log.d(TAG, "defaultList: top rated");
                     loadDataFromApi(selectionCriteria);
                     break;
                 case SELECTION_FAVORITE:
+                    Log.d(TAG, "defaultList: favorite");
                     getSupportLoaderManager().restartLoader(FAVORITE_LOADER_ID, null, this);
                     break;
             }
         } else {
+            Log.d(TAG, "defaultList: else block");
             loadDataFromApi(selectionCriteria);
         }
     }
@@ -283,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     }
 
     private void loadDataFromApi(String selectionCriteria) {
+        Log.d(TAG, "loadDataFromApi: called");
         String dataUrl = NetworkUtils.buildDataUrl(selectionCriteria).toString();
 
         JsonObjectRequest mJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, dataUrl, null, new Response.Listener<JSONObject>() {
@@ -309,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
 
     private void loadFavorite(Cursor data) {
+        Log.d(TAG, "loadFavorite: called");
         ArrayList<JsonDataUtility.MovieItem> favoriteList = new ArrayList<>();
         while (data.moveToNext()) {
             JsonDataUtility.MovieItem loadedMovieItem = new JsonDataUtility.MovieItem(data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID)),
@@ -317,8 +327,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                     data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_RELEASE_DATE)));
             favoriteList.add(loadedMovieItem);
         }
+        if (favoriteList.isEmpty()) {
+            Toast.makeText(this, "Empty favorite list", Toast.LENGTH_SHORT).show();
+        }
         mFavoriteList = favoriteList;
         mMovieListAdapter.loadNewData(mFavoriteList);
+
         mProgressBar.setVisibility(View.GONE);
     }
 

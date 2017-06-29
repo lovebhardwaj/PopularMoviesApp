@@ -33,7 +33,6 @@ public class NetworkUtils {
     private final static String APPEND_TO_RESPONSE_VALUE = "videos,reviews";
     private final static String YOUTUBE_QUERY_PARAMETER = "v";
 
-
     public static URL buildDataUrl(String selectionCriteria) {
         Uri builtUri = Uri.parse(BASE_THE_MOVIE_DB_URL).buildUpon()
                 .appendPath(selectionCriteria)
