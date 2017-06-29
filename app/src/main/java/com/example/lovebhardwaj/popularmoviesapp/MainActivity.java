@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                     data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_RELEASE_DATE)));
             favoriteList.add(loadedMovieItem);
         }
-        if (favoriteList.isEmpty()) {
+        if (favoriteList.isEmpty() && statusString.equals(SELECTION_FAVORITE)) {
             Toast.makeText(this, "Empty favorite list", Toast.LENGTH_SHORT).show();
         }
         mFavoriteList = favoriteList;

@@ -86,4 +86,5 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Move
             mOnPosterClickListener.onPosterClickListener(movieClicked);
         }
     }
+
 }

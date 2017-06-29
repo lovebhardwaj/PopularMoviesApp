@@ -1,15 +1,19 @@
 package com.example.lovebhardwaj.popularmoviesapp;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -107,7 +111,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if (mMovieItem != null) {
             movieTitleTextView.setText(mMovieItem.getTitle());
-            Picasso.with(this).load(NetworkUtils.buildImageUrl(mMovieItem.getPosterPath())).into(posterImageView);
+            Picasso.with(this).load(NetworkUtils.buildDynamicUri(posterWidth(), mMovieItem.getPosterPath())).into(posterImageView);
             releaseDateTextView.setText(mMovieItem.getReleaseDate());
             ratingTextView.setText(mMovieItem.getUserRating());
             plotTextView.setText(mMovieItem.getPlotSynopsis());
@@ -230,5 +234,30 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public String posterWidth(){
+        String returnString;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        if (screenWidth/92 < 3){
+            returnString = "92";
+        }else if (screenWidth/154 < 3){
+            returnString = "154";
+        }else if (screenWidth/185 < 3){
+            returnString = "185";
+        }else if (screenWidth/342 < 3){
+            returnString = "342";
+        }else if (screenWidth/500 < 3){
+            returnString = "500";
+        }else if (screenWidth/780 < 3){
+            returnString = "780";
+        }else {
+            returnString = "500";
+        }
+        Log.d(TAG, "posterWidth: " + returnString);
+        return returnString;
     }
 }
