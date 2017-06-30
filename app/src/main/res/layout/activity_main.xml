@@ -22,5 +22,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
+            android:visibility="visible"
+            android:indeterminate="true"
+            android:background="@color/colorAccent"
             android:max="100"/>
 </merge>

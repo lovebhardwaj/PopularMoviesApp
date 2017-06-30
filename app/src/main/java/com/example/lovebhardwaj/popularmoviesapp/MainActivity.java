@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     @Override
     protected void onResume() {
+        mProgressBar.setVisibility(View.VISIBLE);
         String selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
 
         if (selectionCriteria.equals(statusString)) isSameList = true;
@@ -298,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             @Override
             public void onResponse(JSONObject response) {
                 if (response != null) {
-                    mProgressBar.setVisibility(View.GONE);
+//                    mProgressBar.setVisibility(View.GONE);
                     mMovieItems = JsonDataUtility.moviesData(response);
                     mMovieListAdapter.loadNewData(mMovieItems);
 
@@ -308,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(MainActivity.this, R.string.error_internet, Toast.LENGTH_SHORT).show();
-                mProgressBar.setVisibility(View.GONE);
+//                mProgressBar.setVisibility(View.GONE);
             }
         });
         mJsonObjectRequest.addMarker(TAG);// Marker to be used to cancel any volley request on stop

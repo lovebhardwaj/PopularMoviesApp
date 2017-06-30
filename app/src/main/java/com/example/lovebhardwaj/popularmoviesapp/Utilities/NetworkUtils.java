@@ -27,7 +27,7 @@ public class NetworkUtils {
 
     //API key to required to fetch the data from the api
     private final static String API_KEY = "api_key";
-    private final static String API_KEY_VALUE = "";
+    private final static String API_KEY_VALUE = "5779e2ac11fe018bdc8a95ba1a89a44a";
 
     private final static String APPEND_TO_RESPONSE = "append_to_response";
     private final static String APPEND_TO_RESPONSE_VALUE = "videos,reviews";
