@@ -19,4 +19,5 @@
     <string name="ratings">Ratings:</string>
     <string name="release">Release :</string>
     <string name="share_content_desc">Share with other people</string>
+    <string name="empty_favorite_List">Empty favorite list</string>
 </resources>

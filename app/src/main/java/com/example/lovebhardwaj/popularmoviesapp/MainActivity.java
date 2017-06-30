@@ -35,6 +35,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnPosterClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
         LoaderManager.LoaderCallbacks<Cursor> {
+
     private static final String TAG = "MainActivity";
     //Selection criteria, based on which data will be fetched
     final static String SELECTION_POPULAR = "popular";
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     private SharedPreferences mSharedPreferences;
 
     private String statusString;
-    private boolean isSameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         mProgressBar = (ProgressBar) findViewById(R.id.contentLoadingProgressBar);
         mProgressBar.setVisibility(View.VISIBLE);
+
         getSupportLoaderManager().initLoader(FAVORITE_LOADER_ID, null, this);
 
         mLayoutManager = new GridLayoutManager(this, numberOfColumns());
@@ -84,8 +85,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         statusString = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
         defaultList();
-        Log.d(TAG, "onCreate: status string : " + statusString);
-        isSameList = false;
+
 
         if (savedInstanceState != null) {
             //Get the state of the recycler view
@@ -97,12 +97,18 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     @Override
     protected void onResume() {
-        mProgressBar.setVisibility(View.VISIBLE);
         String selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
+        //Check to see if same after returning from another activity or from landscape mode
+        if (selectionCriteria.equals(statusString) && recyclerViewState != null) {
+           //If same list was selected again
+                //Restore the state
+                //Check to see if there is a saved state
+                mLayoutManager.onRestoreInstanceState(recyclerViewState); //Load the state
+            }
 
-        if (selectionCriteria.equals(statusString)) isSameList = true;
 
         if (selectionCriteria.equals(SELECTION_FAVORITE)) { //Only restart the loader when favorite list selected
+            //User may have deleted something from movie list, need to update the list
             getSupportLoaderManager().restartLoader(FAVORITE_LOADER_ID, null, this);
         }
         super.onResume();
@@ -127,12 +133,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                 break;
         }
 
-
-        if (recyclerViewState != null && isSameList) {//If same list was selected again
-            //Restore the state
-            //Check to see if there is a saved state
-            mLayoutManager.onRestoreInstanceState(recyclerViewState); //Load the state
-        }
     }
 
     @Override
@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     }
 
     private boolean checkIfFavorite(JsonDataUtility.MovieItem item) {
+        //Method to check if favorite, if it is then pass the value. So that the detail view can work accordingly
         boolean status = false;
         if (mFavoriteList != null) {
             for (JsonDataUtility.MovieItem listItem : mFavoriteList) {
@@ -218,11 +219,9 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     }
 
     private void defaultList() {
-        Log.d(TAG, "defaultList: default list");
         String selectionCriteria = SELECTION_POPULAR;
         //Selection criteria for data to be downloaded
 
-        //No need to check if preference is empty, if it is the default value is used
         if (mSharedPreferences != null) {
             selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
             Log.d(TAG, "defaultList: selection criteria : " + selectionCriteria);
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                     break;
             }
         } else {
-            Log.d(TAG, "defaultList: else block");
+            //Load the default list that is the popular movies
             loadDataFromApi(selectionCriteria);
         }
     }
@@ -292,14 +291,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     }
 
     private void loadDataFromApi(String selectionCriteria) {
-        Log.d(TAG, "loadDataFromApi: called");
         String dataUrl = NetworkUtils.buildDataUrl(selectionCriteria).toString();
 
         JsonObjectRequest mJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, dataUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 if (response != null) {
-//                    mProgressBar.setVisibility(View.GONE);
                     mMovieItems = JsonDataUtility.moviesData(response);
                     mMovieListAdapter.loadNewData(mMovieItems);
 
@@ -309,12 +306,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(MainActivity.this, R.string.error_internet, Toast.LENGTH_SHORT).show();
-//                mProgressBar.setVisibility(View.GONE);
             }
         });
         mJsonObjectRequest.addMarker(TAG);// Marker to be used to cancel any volley request on stop
         NetworkUtils.VolleyUtility.getInstance(this).addToRequestQue(mJsonObjectRequest);
-
+        mProgressBar.setVisibility(View.GONE);
     }
 
 
@@ -329,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             favoriteList.add(loadedMovieItem);
         }
         if (favoriteList.isEmpty() && statusString.equals(SELECTION_FAVORITE)) {
-            Toast.makeText(this, "Empty favorite list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.empty_favorite_List, Toast.LENGTH_SHORT).show();
         }
         mFavoriteList = favoriteList;
         mMovieListAdapter.loadNewData(mFavoriteList);

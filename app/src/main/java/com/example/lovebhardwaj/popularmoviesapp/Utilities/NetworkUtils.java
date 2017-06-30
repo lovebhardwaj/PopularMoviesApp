@@ -53,6 +53,7 @@ public class NetworkUtils {
     }
 
     public static Uri buildDynamicUri(String posterWidth, String posterPath){
+        //Creating uri for downloading the poster based on the screen size
         return Uri.parse("http://image.tmdb.org/t/p/w" + posterWidth + "/" + posterPath);
     }
 

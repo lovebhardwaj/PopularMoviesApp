@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -237,6 +236,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     public String posterWidth(){
+        //Method to check the screen size and display relevant poster size
+        //Poster will cover around one third of the screen
         String returnString;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
@@ -257,7 +258,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }else {
             returnString = "500";
         }
-        Log.d(TAG, "posterWidth: " + returnString);
         return returnString;
     }
 }

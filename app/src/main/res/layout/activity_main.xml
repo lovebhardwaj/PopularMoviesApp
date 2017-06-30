@@ -17,13 +17,12 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <android.support.v4.widget.ContentLoadingProgressBar
+        <ProgressBar
             android:id="@+id/contentLoadingProgressBar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:visibility="visible"
             android:indeterminate="true"
-            android:background="@color/colorAccent"
             android:max="100"/>
 </merge>
