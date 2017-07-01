@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="regular_margin">8dp</dimen>
+    <dimen name="landscape_margin">16dp</dimen>
+    <dimen name="star_dimensions">25dp</dimen>
+</resources>
