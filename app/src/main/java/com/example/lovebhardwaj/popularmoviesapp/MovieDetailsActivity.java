@@ -78,6 +78,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(getString(R.string.movie_detail_title));
         setContentView(R.layout.activity_movie_details);
         if (this.getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Enable the up button
