@@ -11,7 +11,7 @@ import android.provider.BaseColumns;
 
 public final class MovieContract {
 
-    static final String CONTENT_AUTHORITY = "com.example.lovebhardwaj.popularmoviesapp.Data";
+    static final String CONTENT_AUTHORITY = "com.example.lovebhardwaj.popularmoviesapp.data";
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     static final String PATH_MOVIES = "FavoriteMovies";
 
