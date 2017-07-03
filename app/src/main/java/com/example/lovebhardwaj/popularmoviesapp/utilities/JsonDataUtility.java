@@ -1,4 +1,4 @@
-package com.example.lovebhardwaj.popularmoviesapp.Utilities;
+package com.example.lovebhardwaj.popularmoviesapp.utilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;

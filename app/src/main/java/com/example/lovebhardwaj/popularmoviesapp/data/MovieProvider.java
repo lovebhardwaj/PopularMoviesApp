@@ -1,4 +1,4 @@
-package com.example.lovebhardwaj.popularmoviesapp.Data;
+package com.example.lovebhardwaj.popularmoviesapp.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

@@ -24,11 +24,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.lovebhardwaj.popularmoviesapp.Adapters.ReviewListAdapter;
-import com.example.lovebhardwaj.popularmoviesapp.Adapters.TrailerListAdapter;
-import com.example.lovebhardwaj.popularmoviesapp.Data.MovieContract;
-import com.example.lovebhardwaj.popularmoviesapp.Utilities.JsonDataUtility;
-import com.example.lovebhardwaj.popularmoviesapp.Utilities.NetworkUtils;
+import com.example.lovebhardwaj.popularmoviesapp.adapters.ReviewListAdapter;
+import com.example.lovebhardwaj.popularmoviesapp.adapters.TrailerListAdapter;
+import com.example.lovebhardwaj.popularmoviesapp.data.MovieContract;
+import com.example.lovebhardwaj.popularmoviesapp.utilities.JsonDataUtility;
+import com.example.lovebhardwaj.popularmoviesapp.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;

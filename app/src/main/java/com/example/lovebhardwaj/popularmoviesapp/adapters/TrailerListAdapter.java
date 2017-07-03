@@ -1,4 +1,4 @@
-package com.example.lovebhardwaj.popularmoviesapp.Adapters;
+package com.example.lovebhardwaj.popularmoviesapp.adapters;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.lovebhardwaj.popularmoviesapp.R;
-import com.example.lovebhardwaj.popularmoviesapp.Utilities.JsonDataUtility;
-import com.example.lovebhardwaj.popularmoviesapp.Utilities.NetworkUtils;
+import com.example.lovebhardwaj.popularmoviesapp.utilities.JsonDataUtility;
+import com.example.lovebhardwaj.popularmoviesapp.utilities.NetworkUtils;
 
 import java.util.ArrayList;
 

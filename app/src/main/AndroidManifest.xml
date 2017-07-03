@@ -34,8 +34,8 @@
                 android:value=".MainActivity"/>
         </activity>
         <provider
-            android:authorities="com.example.lovebhardwaj.popularmoviesapp.Data"
-            android:name=".Data.MovieProvider"
+            android:authorities="com.example.lovebhardwaj.popularmoviesapp.data"
+            android:name=".data.MovieProvider"
             android:exported="false"/>
     </application>
 
