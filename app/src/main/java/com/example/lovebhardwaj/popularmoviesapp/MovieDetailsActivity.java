@@ -3,12 +3,14 @@ package com.example.lovebhardwaj.popularmoviesapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -175,7 +177,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.star_golden));
                             //Add to favorites
 
-                            ContentValues values = new ContentValues();
+                            final ContentValues values = new ContentValues();
                             values.put(MovieContract.MovieEntry.MOVIE_ID, mMovieItem.getMovieId());
                             values.put(MovieContract.MovieEntry.MOVIE_TITLE, mMovieItem.getTitle());
                             values.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, mMovieItem.getPosterPath());
@@ -183,11 +185,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             values.put(MovieContract.MovieEntry.MOVIE_RATING, mMovieItem.getUserRating());
                             values.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, mMovieItem.getReleaseDate());
 
-                            long rowId = MovieContract.getRowId(getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values));
+                            AsyncTask<Void, Void, Boolean> addMovieTask = new AsyncTask<Void, Void, Boolean>() {
+                                Boolean status;
+                                @Override
+                                protected Boolean doInBackground(Void... params) {
+                                    long rowId = MovieContract.getRowId(getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values));
+                                    return (status = rowId > 0);
+                                }
 
-                            if (rowId > 0) {
-                                Toast.makeText(MovieDetailsActivity.this, "Successfully added to the favorites list", Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                protected void onPostExecute(Boolean aBoolean) {
+                                    super.onPostExecute(aBoolean);
+                                    Log.d(TAG, "onPostExecute: result : " + aBoolean);
+                                    isAdded(aBoolean);
+                                }
+                            }.execute();
+
+
                         }
 
                     } else {
@@ -203,6 +217,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                 }
             });
+        }
+    }
+
+    private void isAdded(boolean status){
+        if (status){
+            Toast.makeText(this, "Added to the favorite list", Toast.LENGTH_SHORT).show();
         }
     }
 
