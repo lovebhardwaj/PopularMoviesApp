@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     private static final int FAVORITE_LOADER_ID = 619;
     private static final String RECYCLER_VIEW_BUNDLE_KEY = "RecyclerViewState";
-    private static final String RECYCLER_VIEW_POSITION = "RecyclerViewPosition";
     private static final String OLD_PREFERENCE = "OldPreference";
+    private static final String POSITION_KEY = "PositionKey";
 
     //List to store the relevant movies
-    private ArrayList<JsonDataUtility.MovieItem> mMovieItems;
-    private ArrayList<JsonDataUtility.MovieItem> mFavoriteList;
+    private static ArrayList<JsonDataUtility.MovieItem> mMovieItems;
+    private static ArrayList<JsonDataUtility.MovieItem> mFavoriteList;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     private SharedPreferences mSharedPreferences;
 
     private String currentPreference;//Variable to store sharedPreference String
-    private int firstVisiblePosition;
-    private int lastVisiblePosition;
-    private int visiblePosition;
+
+    private static Bundle saveRecyclerState;
 
 
     @Override
@@ -92,15 +91,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         //Method to run the default code to load the UI
         defaultList();
-
-        //Setup recycler view onScrollListener to save the scroll position
-        setUpRecyclerViewScroller(mRecyclerView);
-        if (savedInstanceState != null) {
-
-            if (savedInstanceState.containsKey(RECYCLER_VIEW_BUNDLE_KEY)) {
-                recyclerViewState = savedInstanceState.getParcelable(RECYCLER_VIEW_BUNDLE_KEY);
-            }
-        }
 
     }
 
@@ -129,14 +119,20 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     @Override
     protected void onResume() {
         String selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
+
         //Check to see if same after returning from another activity or from landscape mode
-        if (selectionCriteria.equals(currentPreference) && recyclerViewState != null) {
-           //If same list was selected again restore the state
+        if (saveRecyclerState != null) {
+            //If same list was selected again restore the state
+            String oldSelection = saveRecyclerState.getString(OLD_PREFERENCE);
+            if (selectionCriteria.equals(oldSelection)) {
+                recyclerViewState = saveRecyclerState.getParcelable(RECYCLER_VIEW_BUNDLE_KEY);
                 mLayoutManager.onRestoreInstanceState(recyclerViewState); //Load the state
             }
+            int scrollPosition = saveRecyclerState.getInt(POSITION_KEY);
 
-        if (visiblePosition >= 0 && selectionCriteria.equals(currentPreference)) {
-            mRecyclerView.smoothScrollToPosition(visiblePosition);
+            if (scrollPosition == mMovieListAdapter.getItemCount()-1){
+                mRecyclerView.smoothScrollToPosition(scrollPosition);
+            }
         }
 
         if (selectionCriteria.equals(SELECTION_FAVORITE)) { //Only restart the loader when favorite list selected
@@ -144,6 +140,17 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             getSupportLoaderManager().restartLoader(FAVORITE_LOADER_ID, null, this);
         }
         super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveRecyclerState = new Bundle();
+        saveRecyclerState.putParcelable(RECYCLER_VIEW_BUNDLE_KEY, mLayoutManager.onSaveInstanceState());
+        saveRecyclerState.putString(OLD_PREFERENCE, mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR));
+        saveRecyclerState.putInt(POSITION_KEY, ((GridLayoutManager) mLayoutManager).findLastVisibleItemPosition());
+
     }
 
     @Override
@@ -172,24 +179,16 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //Saving the recycler view state
-        outState.putParcelable(RECYCLER_VIEW_BUNDLE_KEY, mLayoutManager.onSaveInstanceState());
-        outState.putInt(RECYCLER_VIEW_POSITION, visiblePosition);
         outState.putString(OLD_PREFERENCE, mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR));
+
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            //Get the state of the recycler view
 
-            if (savedInstanceState.containsKey(RECYCLER_VIEW_POSITION)){
-                visiblePosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION);
-            }
-
-            if (savedInstanceState.containsKey(OLD_PREFERENCE)){
+            if (savedInstanceState.containsKey(OLD_PREFERENCE)) {
                 currentPreference = savedInstanceState.getString(OLD_PREFERENCE);
             }
         }
@@ -348,7 +347,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mJsonObjectRequest.addMarker(TAG);// Marker to be used to cancel any volley request on stop
         NetworkUtils.VolleyUtility.getInstance(this).addToRequestQue(mJsonObjectRequest);
         mProgressBar.setVisibility(View.GONE);
-//        mRecyclerView.smoothScrollToPosition(visiblePosition);
     }
 
 
@@ -367,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         }
         mFavoriteList = favoriteList;
         mMovieListAdapter.loadNewData(mFavoriteList);
-//        mRecyclerView.smoothScrollToPosition(visiblePosition);
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -379,24 +376,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         int numColumns = screenWidth / widthDivider;
         if (numColumns < 2) return 2;
         return numColumns;
-    }
-
-    private void setUpRecyclerViewScroller(RecyclerView recyclerView){
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                firstVisiblePosition = ((GridLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition();
-                lastVisiblePosition = ((GridLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition();
-                int itemCount = mLayoutManager.getItemCount();
-                visiblePosition = (lastVisiblePosition);
-                if (firstVisiblePosition == 0){
-                    visiblePosition = firstVisiblePosition;
-                }else if (lastVisiblePosition == itemCount -1) {
-                    visiblePosition = lastVisiblePosition;
-                }
-            }
-        });
     }
 
 }
