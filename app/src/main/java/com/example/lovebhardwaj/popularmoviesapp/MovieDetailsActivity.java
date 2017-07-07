@@ -48,6 +48,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ArrayList<JsonDataUtility.TrailerInfo> mTrailerList;
     private ArrayList<JsonDataUtility.ReviewInfo> mReviewList;
 
+    private static final String SCROLL_VIEW_POSITION = "ScrollViewPosition";
+
     //Binding views
     @BindView(R.id.movieTitleTextView)
     TextView movieTitleTextView;
@@ -124,6 +126,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
     }
+
 
     private void loadTrailerReviewData(String trailerReviewUrl){
         //Using the volley class to load the data

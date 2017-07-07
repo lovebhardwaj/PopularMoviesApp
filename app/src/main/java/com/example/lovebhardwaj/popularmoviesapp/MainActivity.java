@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     private static final int FAVORITE_LOADER_ID = 619;
     private static final String RECYCLER_VIEW_BUNDLE_KEY = "RecyclerViewState";
+    private static final String RECYCLER_VIEW_POSITION = "RecyclerViewPosition";
+    private static final String OLD_PREFERENCE = "OldPreference";
 
     //List to store the relevant movies
     private ArrayList<JsonDataUtility.MovieItem> mMovieItems;
@@ -63,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     private SharedPreferences mSharedPreferences;
 
     private String currentPreference;//Variable to store sharedPreference String
+    private int firstVisiblePosition;
+    private int lastVisiblePosition;
+    private int visiblePosition;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +93,15 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         //Method to run the default code to load the UI
         defaultList();
 
-
+        //Setup recycler view onScrollListener to save the scroll position
+        setUpRecyclerViewScroller(mRecyclerView);
         if (savedInstanceState != null) {
-            //Get the state of the recycler view
+
             if (savedInstanceState.containsKey(RECYCLER_VIEW_BUNDLE_KEY)) {
                 recyclerViewState = savedInstanceState.getParcelable(RECYCLER_VIEW_BUNDLE_KEY);
             }
         }
+
     }
 
     private void defaultList() {
@@ -104,15 +111,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         if (mSharedPreferences != null) {
             switch (selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR)) {
                 case SELECTION_POPULAR:
-                    Log.d(TAG, "defaultList: popular");
                     loadDataFromApi(selectionCriteria);
                     break;
                 case SELECTION_TOP_RATED:
-                    Log.d(TAG, "defaultList: top rated");
                     loadDataFromApi(selectionCriteria);
                     break;
                 case SELECTION_FAVORITE:
-                    Log.d(TAG, "defaultList: favorite");
                     getSupportLoaderManager().initLoader(FAVORITE_LOADER_ID, null, this);
                     break;
             }
@@ -131,6 +135,9 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                 mLayoutManager.onRestoreInstanceState(recyclerViewState); //Load the state
             }
 
+        if (visiblePosition >= 0 && selectionCriteria.equals(currentPreference)) {
+            mRecyclerView.smoothScrollToPosition(visiblePosition);
+        }
 
         if (selectionCriteria.equals(SELECTION_FAVORITE)) { //Only restart the loader when favorite list selected
             //User may have deleted something from movie list, need to update the list
@@ -167,6 +174,26 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         super.onSaveInstanceState(outState);
         //Saving the recycler view state
         outState.putParcelable(RECYCLER_VIEW_BUNDLE_KEY, mLayoutManager.onSaveInstanceState());
+        outState.putInt(RECYCLER_VIEW_POSITION, visiblePosition);
+        outState.putString(OLD_PREFERENCE, mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            //Get the state of the recycler view
+
+            if (savedInstanceState.containsKey(RECYCLER_VIEW_POSITION)){
+                visiblePosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION);
+            }
+
+            if (savedInstanceState.containsKey(OLD_PREFERENCE)){
+                currentPreference = savedInstanceState.getString(OLD_PREFERENCE);
+            }
+        }
+
     }
 
     @Override
@@ -321,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mJsonObjectRequest.addMarker(TAG);// Marker to be used to cancel any volley request on stop
         NetworkUtils.VolleyUtility.getInstance(this).addToRequestQue(mJsonObjectRequest);
         mProgressBar.setVisibility(View.GONE);
+//        mRecyclerView.smoothScrollToPosition(visiblePosition);
     }
 
 
@@ -339,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         }
         mFavoriteList = favoriteList;
         mMovieListAdapter.loadNewData(mFavoriteList);
-
+//        mRecyclerView.smoothScrollToPosition(visiblePosition);
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -352,4 +380,23 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         if (numColumns < 2) return 2;
         return numColumns;
     }
+
+    private void setUpRecyclerViewScroller(RecyclerView recyclerView){
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                firstVisiblePosition = ((GridLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition();
+                lastVisiblePosition = ((GridLayoutManager) mLayoutManager).findLastCompletelyVisibleItemPosition();
+                int itemCount = mLayoutManager.getItemCount();
+                visiblePosition = (lastVisiblePosition);
+                if (firstVisiblePosition == 0){
+                    visiblePosition = firstVisiblePosition;
+                }else if (lastVisiblePosition == itemCount -1) {
+                    visiblePosition = lastVisiblePosition;
+                }
+            }
+        });
+    }
+
 }

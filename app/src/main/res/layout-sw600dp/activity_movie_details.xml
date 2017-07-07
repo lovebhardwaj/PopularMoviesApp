@@ -16,6 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_margin="0dp"
+        android:id="@+id/tabDetailScrollView"
         android:fillViewport="true">
 
 
