@@ -121,17 +121,19 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         String selectionCriteria = mSharedPreferences.getString(SORT_ORDER_KEY, SELECTION_POPULAR);
 
         //Check to see if same after returning from another activity or from landscape mode
-        if (saveRecyclerState != null) {
+        if (saveRecyclerState != null ) {
             //If same list was selected again restore the state
             String oldSelection = saveRecyclerState.getString(OLD_PREFERENCE);
             if (selectionCriteria.equals(oldSelection)) {
                 recyclerViewState = saveRecyclerState.getParcelable(RECYCLER_VIEW_BUNDLE_KEY);
                 mLayoutManager.onRestoreInstanceState(recyclerViewState); //Load the state
             }
-            int scrollPosition = saveRecyclerState.getInt(POSITION_KEY);
+            if (mMovieItems != null && (selectionCriteria.equals(SELECTION_POPULAR) || selectionCriteria.equals(SELECTION_TOP_RATED))) {
+                int scrollPosition = saveRecyclerState.getInt(POSITION_KEY);
 
-            if (scrollPosition == mMovieListAdapter.getItemCount()-1){
-                mRecyclerView.smoothScrollToPosition(scrollPosition);
+                if (scrollPosition == mMovieListAdapter.getItemCount() - 1) {
+                    mRecyclerView.smoothScrollToPosition(scrollPosition);
+                }
             }
         }
 
@@ -353,12 +355,14 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     private void loadFavorite(Cursor data) {
 
         ArrayList<JsonDataUtility.MovieItem> favoriteList = new ArrayList<>();
-        while (data.moveToNext()) {
-            JsonDataUtility.MovieItem loadedMovieItem = new JsonDataUtility.MovieItem(data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID)),
-                    data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_TITLE)), data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_POSTER_PATH)),
-                    data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_PLOT)), data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_RATING)),
-                    data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_RELEASE_DATE)));
-            favoriteList.add(loadedMovieItem);
+        if (data != null) {
+            while (data.moveToNext()) {
+                JsonDataUtility.MovieItem loadedMovieItem = new JsonDataUtility.MovieItem(data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_ID)),
+                        data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_TITLE)), data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_POSTER_PATH)),
+                        data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_PLOT)), data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_RATING)),
+                        data.getString(data.getColumnIndex(MovieContract.MovieEntry.MOVIE_RELEASE_DATE)));
+                favoriteList.add(loadedMovieItem);
+            }
         }
         if (favoriteList.isEmpty() && currentPreference.equals(SELECTION_FAVORITE)) {
             Toast.makeText(this, R.string.empty_favorite_List, Toast.LENGTH_SHORT).show();
